@@ -1,4 +1,4 @@
-# job4j_threads
+# job4j_dreamjob
 Учебный проект сайта https://job4j.ru/. 
 Уровень 3 "Middle". 
 Проект "Работа мечты" 
