@@ -1,4 +1,4 @@
-package repository;
+package ru.job4j.repository;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-import model.Vacancy;
+import ru.job4j.model.Vacancy;
 
 public class MemoryVacancyRepository implements VacancyRepository {
     private static final MemoryVacancyRepository INSTANCE = new MemoryVacancyRepository();    

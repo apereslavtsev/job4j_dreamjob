@@ -1,27 +1,27 @@
-package model;
+package ru.job4j.model;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-public class Candidate {
-    
+public class Vacancy {
+
     private int id;
 
-    private String name;
+    private String title;
     
     private String description;
     
     private LocalDateTime creationDate;
-    
-    public Candidate(int id, String name) {
+
+    public Vacancy(int id, String title) {
         this.id = id;
-        this.name = name;
+        this.title = title;
     }
 
-    public Candidate(int id, String name, String description, LocalDateTime creationDate) {
+    public Vacancy(int id, String title, String description, LocalDateTime creationDate) {
         super();
         this.id = id;
-        this.name = name;
+        this.title = title;
         this.description = description;
         this.creationDate = creationDate;
     }
@@ -34,12 +34,12 @@ public class Candidate {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getTitle() {
+        return title;
     }
 
-    public void setTitle(String name) {
-        this.name = name;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public String getDescription() {
@@ -66,8 +66,8 @@ public class Candidate {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        Candidate candidate = (Candidate) o;
-        return id == candidate.id;
+        Vacancy vacancy = (Vacancy) o;
+        return id == vacancy.id;
     }
 
     @Override

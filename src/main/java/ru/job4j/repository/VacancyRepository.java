@@ -1,6 +1,6 @@
-package repository;
+package ru.job4j.repository;
 
-import model.Vacancy;
+import ru.job4j.model.Vacancy;
 
 
 public interface VacancyRepository extends Repository<Vacancy> {

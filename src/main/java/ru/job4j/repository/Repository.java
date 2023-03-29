@@ -1,4 +1,4 @@
-package repository;
+package ru.job4j.repository;
 
 import java.util.Collection;
 import java.util.Optional;

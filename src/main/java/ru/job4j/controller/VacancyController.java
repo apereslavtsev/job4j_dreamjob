@@ -5,8 +5,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import repository.MemoryVacancyRepository;
-import repository.VacancyRepository;
+import ru.job4j.repository.MemoryVacancyRepository;
+import ru.job4j.repository.VacancyRepository;
 
 @Controller
 @RequestMapping("/vacancies") /* Работать с кандидатами будем по URI /vacancies/** */
