@@ -11,14 +11,13 @@
 
 <style>
 nav.navbar .dropdown:hover>.dropdown-menu {
-	display: block;
+display: block;
 }
 </style>
 
-  <title>Создание вакансии</title>
+  <title>Создание кандидата</title>
 </head>
 <body>
-  
 	<div class="container-fluid p-0">
 		<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
 			<div class="container">
@@ -30,7 +29,7 @@ nav.navbar .dropdown:hover>.dropdown-menu {
 							<a class="nav-link" href="/">Главная</a>
 						</li>
 						
-						<li class="nav-item dropdown activ">
+						<li class="nav-item dropdown">
 							<a class="nav-link dropdown-toggle" th:href="@{/vacancies}" id="navbarDropdownMenuLink" 
 								aria-haspopup="true" aria-expanded="false"> Вакансии </a>
 								
@@ -39,7 +38,7 @@ nav.navbar .dropdown:hover>.dropdown-menu {
 									</div>
 						</li>
 						
-						<li class="nav-item dropdown">
+						<li class="nav-item dropdown activ">
 							<a class="nav-link dropdown-toggle" th:href="@{/candidates}" id="navbarDropdownMenuLink" 
 								aria-haspopup="true" aria-expanded="false"> Кандидаты </a>
 								
@@ -53,22 +52,22 @@ nav.navbar .dropdown:hover>.dropdown-menu {
 			</div>
 		</nav>
 	</div>
-
+      
     <div class="container">
       <form class="mt-3">
         <div class="mb-3">
-          <label for="title" class="form-label"><b>Название</b></label>
-          <input type="text" class="form-control" id="title" placeholder="Предлагая должность, например, Ведущий Java разработчик">
+          <label for="title" class="form-label"><b>Имя</b></label>
+          <input type="text" class="form-control" id="name" placeholder="Ваше имя">
         </div>
         <div class="mb-3">
           <label for="description" class="form-label"><b>Описание</b></label>
-          <textarea class="form-control" id="description" rows="25" placeholder="Опишите требования к кандидату"></textarea>
+          <textarea class="form-control" id="description" rows="25" placeholder="Расскажите о себе"></textarea>
         </div>
         <div class="mb-3 row">
           <div class="col-6"></div>
           <div class="col-6">
             <div class="row">
-              <div class="col-6"><a class="btn btn-danger w-100" th:href="@{/vacancies}">Отмена</a></div>
+              <div class="col-6"><a class="btn btn-danger w-100" th:href="@{/candidates}">Отмена</a></div>
               <div class="col-6"><button class="btn btn-primary w-100" type="submit">Сохранить</button>
               </div>
             </div>
