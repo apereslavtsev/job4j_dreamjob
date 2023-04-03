@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import ru.job4j.model.Candidate;
+import ru.job4j.model.Vacancy;
 
 public class MemoryCandidateRepository implements CandidateRepository {
 
@@ -43,8 +44,10 @@ public class MemoryCandidateRepository implements CandidateRepository {
 
     @Override
     public boolean update(Candidate candidate) {
-        return candidates.computeIfPresent(candidate.getId(), 
-                (id, oldCandidate) -> new Candidate(oldCandidate.getId(), candidate.getName())) != null;
+        return candidates.computeIfPresent(
+                candidate.getId(), (id, oldCandidate) -> new Candidate(oldCandidate.getId(),
+                        candidate.getName(), candidate.getDescription(), oldCandidate.getCreationDate())
+                ) != null;
     }
 
     @Override

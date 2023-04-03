@@ -12,7 +12,6 @@ public class Vacancy {
     private String description;
     
     private LocalDateTime creationDate = LocalDateTime.now();
-
     
     public Vacancy() {
     }    
