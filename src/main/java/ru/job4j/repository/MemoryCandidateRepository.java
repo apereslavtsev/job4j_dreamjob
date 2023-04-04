@@ -6,27 +6,24 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
+import org.springframework.stereotype.Repository;
+
 import ru.job4j.model.Candidate;
 
+@Repository
 public class MemoryCandidateRepository implements CandidateRepository {
-
-    private static final MemoryCandidateRepository INSTANCE = new MemoryCandidateRepository();    
 
     private int nextId = 1;
 
     private final Map<Integer, Candidate> candidates = new HashMap<>();
     
-    private MemoryCandidateRepository() {
+    public MemoryCandidateRepository() {
         save(new Candidate(0, "Igor", "Intern Java Developer description", LocalDateTime.now()));
         save(new Candidate(0, "Vladislav", "Junior Java Developer description", LocalDateTime.now()));
         save(new Candidate(0, "Oleg", "Junior+ Java Developer description", LocalDateTime.now()));
         save(new Candidate(0, "Mark", "Middle Java Developer description", LocalDateTime.now()));
         save(new Candidate(0, "Stanislav", "Middle+ Java Developer description", LocalDateTime.now()));
         save(new Candidate(0, "Dmitry", "Senior Java Developer description", LocalDateTime.now()));
-    }
-    
-    public static MemoryCandidateRepository getInstance() {
-        return INSTANCE;
     }
     
     @Override

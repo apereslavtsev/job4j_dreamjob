@@ -1,6 +1,5 @@
 package ru.job4j.controller;
 
-import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,14 +10,17 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import ru.job4j.model.Candidate;
-import service.CandidateService;
-import service.SimpleCandidateService;
+import ru.job4j.service.CandidateService;
 
 @Controller
 @RequestMapping("/candidates") /* Работать с кандидатами будем по URI /candidates/** */
 public class CandidateController {
     
-    private final CandidateService candidateService = SimpleCandidateService.getInstance();
+    private final CandidateService candidateService;
+    
+    public CandidateController(CandidateService candidateService) {
+        this.candidateService = candidateService;        
+    }
     
     @GetMapping
     private String getAll(Model model) {

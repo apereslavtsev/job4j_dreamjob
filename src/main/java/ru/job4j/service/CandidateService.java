@@ -1,4 +1,4 @@
-package service;
+package ru.job4j.service;
 
 import java.util.Collection;
 import java.util.Optional;

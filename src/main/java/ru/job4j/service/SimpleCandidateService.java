@@ -1,23 +1,20 @@
-package service;
+package ru.job4j.service;
 
 import java.util.Collection;
 import java.util.Optional;
 
+import org.springframework.stereotype.Service;
+
 import ru.job4j.model.Candidate;
 import ru.job4j.repository.CandidateRepository;
-import ru.job4j.repository.MemoryCandidateRepository;
 
+@Service
 public class SimpleCandidateService implements CandidateService {
 
-    private static final SimpleCandidateService INSTANCE = new SimpleCandidateService();
+    private final CandidateRepository candidateRepository;
 
-    private CandidateRepository candidateRepository = MemoryCandidateRepository.getInstance();
-
-    private SimpleCandidateService() {
-    }
-
-    public static SimpleCandidateService getInstance() {
-        return INSTANCE;
+    public SimpleCandidateService(CandidateRepository candidateRepository) {
+        this.candidateRepository = candidateRepository;
     }
 
     @Override
