@@ -1,5 +1,7 @@
 package ru.job4j.controller;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,7 +11,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import ru.job4j.model.Candidate;
-import ru.job4j.model.Vacancy;
 import ru.job4j.repository.CandidateRepository;
 import ru.job4j.repository.MemoryCandidateRepository;
 
@@ -48,7 +49,7 @@ public class CandidateController {
     }
 
     @PostMapping("/update")
-    public String update(@ModelAttribute Candidate candidate, Model model) {
+    public String update(Model model, @ModelAttribute Candidate candidate) {
         var isUpdated = candidateRepository.update(candidate);
         if (!isUpdated) {
             model.addAttribute("message", "Кандидат с указанным идентификатором не найдена");
