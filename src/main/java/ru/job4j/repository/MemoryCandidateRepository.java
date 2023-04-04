@@ -7,7 +7,6 @@ import java.util.Map;
 import java.util.Optional;
 
 import ru.job4j.model.Candidate;
-import ru.job4j.model.Vacancy;
 
 public class MemoryCandidateRepository implements CandidateRepository {
 
