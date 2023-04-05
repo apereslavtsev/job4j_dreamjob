@@ -51,21 +51,29 @@
 						<th scope="col">#</th>
 						<th scope="col">Имя</th>						
 						<th scope="col">Дата создания</th>
+						<th scope="col">Город</th>
 					</tr>
 				</thead>
 				<tbody>
 					<tr th:each="vacancy: ${vacancies}">
-					            <td>
-			            <span th:if="${vacancy.visible}">
-			            	<i class="bi bi-check-square"></i>
-			            </span>
-			            <span th:if="${!vacancy.visible}">
-			            	<i class="bi bi-square"></i>
-			            </span>
+					    <td>
+				            <span th:if="${vacancy.visible}">
+				            	<i class="bi bi-check-square"></i>
+				            </span>
+				            <span th:if="${!vacancy.visible}">
+				            	<i class="bi bi-square"></i>
+				            </span>
 			            </td>
 						<td th:text="${vacancy.id}" />
 						<td><a th:text="${vacancy.title}" th:href="@{/vacancies/{id}(id=${vacancy.id})}"></a></td>						
 						<td	th:text="${#temporals.format(vacancy.creationDate, 'dd.MM.yyyy')}" />
+																	
+						<div th:each="city : ${cities}">
+							<div th:if="${vacancy.cityId==city.id}">
+								<td th:text="${city.name}" />
+							</div>
+						</div>
+	
 					</tr>
 				</tbody>
 			</table>

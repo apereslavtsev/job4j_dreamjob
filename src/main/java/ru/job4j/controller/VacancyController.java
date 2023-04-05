@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import ru.job4j.model.Vacancy;
+import ru.job4j.service.CityService;
 import ru.job4j.service.VacancyService;
 
 @ThreadSafe
@@ -19,18 +20,23 @@ public class VacancyController {
 
     private final VacancyService vacancyService;
     
-    public VacancyController(VacancyService vacancyService) {
+    private final CityService cityService;
+    
+    public VacancyController(VacancyService vacancyService, CityService cityService) {
         this.vacancyService = vacancyService;
+        this.cityService = cityService;
     }
 
     @GetMapping
     public String getAll(Model model) {
         model.addAttribute("vacancies", vacancyService.findAll());
+        model.addAttribute("cities", cityService.getAll());
         return "vacancies/list";
     }
     
     @GetMapping("/create")
-    public String getCreationPage() {
+    public String getCreationPage(Model model) {
+        model.addAttribute("cities", cityService.getAll());
         return "vacancies/create";
     }
     
@@ -47,6 +53,7 @@ public class VacancyController {
             model.addAttribute("message", "Вакансия с указанным идентификатором не найдена");
             return "errors/404";
         }
+        model.addAttribute("cities", cityService.getAll());
         model.addAttribute("vacancy", vacancyOptional.get());
         return "vacancies/one";
     }

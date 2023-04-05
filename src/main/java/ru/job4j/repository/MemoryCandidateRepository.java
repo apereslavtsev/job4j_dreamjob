@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.junit.runner.notification.RunListener.ThreadSafe;
 import org.springframework.stereotype.Repository;
@@ -15,22 +16,22 @@ import ru.job4j.model.Candidate;
 @Repository
 public class MemoryCandidateRepository implements CandidateRepository {
 
-    private int nextId = 1;
+    private AtomicInteger atomicInt = new AtomicInteger(1);
 
     private final Map<Integer, Candidate> candidates = new ConcurrentHashMap<>();
     
     public MemoryCandidateRepository() {
-        save(new Candidate(0, "Igor", "Intern Java Developer description", LocalDateTime.now()));
-        save(new Candidate(0, "Vladislav", "Junior Java Developer description", LocalDateTime.now()));
-        save(new Candidate(0, "Oleg", "Junior+ Java Developer description", LocalDateTime.now()));
-        save(new Candidate(0, "Mark", "Middle Java Developer description", LocalDateTime.now()));
-        save(new Candidate(0, "Stanislav", "Middle+ Java Developer description", LocalDateTime.now()));
-        save(new Candidate(0, "Dmitry", "Senior Java Developer description", LocalDateTime.now()));
+        save(new Candidate(0, "Igor", "Intern Java Developer description", LocalDateTime.now(), 1));
+        save(new Candidate(0, "Vladislav", "Junior Java Developer description", LocalDateTime.now(), 2));
+        save(new Candidate(0, "Oleg", "Junior+ Java Developer description", LocalDateTime.now(), 3));
+        save(new Candidate(0, "Mark", "Middle Java Developer description", LocalDateTime.now(), 4));
+        save(new Candidate(0, "Stanislav", "Middle+ Java Developer description", LocalDateTime.now(), 5));
+        save(new Candidate(0, "Dmitry", "Senior Java Developer description", LocalDateTime.now(), 6));
     }
     
     @Override
     public Candidate save(Candidate candidate) {
-        candidate.setId(nextId++);
+        candidate.setId(atomicInt.getAndIncrement());
         candidates.put(candidate.getId(), candidate);
         return candidate;
     }
@@ -44,8 +45,8 @@ public class MemoryCandidateRepository implements CandidateRepository {
     public boolean update(Candidate candidate) {
         return candidates.computeIfPresent(
                 candidate.getId(), (id, oldCandidate) -> new Candidate(oldCandidate.getId(),
-                        candidate.getName(), candidate.getDescription(), oldCandidate.getCreationDate())
-                ) != null;
+                        candidate.getName(), candidate.getDescription(), 
+                        oldCandidate.getCreationDate(), candidate.getCityId())) != null;
     }
 
     @Override
