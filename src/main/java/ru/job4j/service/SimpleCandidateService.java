@@ -3,11 +3,13 @@ package ru.job4j.service;
 import java.util.Collection;
 import java.util.Optional;
 
+import org.junit.runner.notification.RunListener.ThreadSafe;
 import org.springframework.stereotype.Service;
 
 import ru.job4j.model.Candidate;
 import ru.job4j.repository.CandidateRepository;
 
+@ThreadSafe
 @Service
 public class SimpleCandidateService implements CandidateService {
 

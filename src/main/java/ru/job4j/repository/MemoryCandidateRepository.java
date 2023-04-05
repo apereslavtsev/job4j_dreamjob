@@ -2,20 +2,22 @@ package ru.job4j.repository;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
 
+import org.junit.runner.notification.RunListener.ThreadSafe;
 import org.springframework.stereotype.Repository;
 
 import ru.job4j.model.Candidate;
 
+@ThreadSafe
 @Repository
 public class MemoryCandidateRepository implements CandidateRepository {
 
     private int nextId = 1;
 
-    private final Map<Integer, Candidate> candidates = new HashMap<>();
+    private final Map<Integer, Candidate> candidates = new ConcurrentHashMap<>();
     
     public MemoryCandidateRepository() {
         save(new Candidate(0, "Igor", "Intern Java Developer description", LocalDateTime.now()));

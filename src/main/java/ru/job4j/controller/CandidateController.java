@@ -1,6 +1,7 @@
 package ru.job4j.controller;
 
 
+import org.junit.runner.notification.RunListener.ThreadSafe;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import ru.job4j.model.Candidate;
 import ru.job4j.service.CandidateService;
 
+@ThreadSafe
 @Controller
 @RequestMapping("/candidates") /* Работать с кандидатами будем по URI /candidates/** */
 public class CandidateController {

@@ -3,11 +3,13 @@ package ru.job4j.service;
 import java.util.Collection;
 import java.util.Optional;
 
+import org.junit.runner.notification.RunListener.ThreadSafe;
 import org.springframework.stereotype.Service;
 
 import ru.job4j.model.Vacancy;
 import ru.job4j.repository.VacancyRepository;
 
+@ThreadSafe
 @Service
 public class SimpleVacancyService implements VacancyService {
 
