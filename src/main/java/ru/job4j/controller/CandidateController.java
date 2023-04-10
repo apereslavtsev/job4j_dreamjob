@@ -1,6 +1,8 @@
 package ru.job4j.controller;
 
 
+import java.io.IOException;
+
 import org.junit.runner.notification.RunListener.ThreadSafe;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -9,7 +11,10 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
+import ru.job4j.dto.FileDto;
 import ru.job4j.model.Candidate;
 import ru.job4j.service.CandidateService;
 import ru.job4j.service.CityService;
@@ -41,9 +46,14 @@ public class CandidateController {
     }
     
     @PostMapping("/create")
-    public String create(@ModelAttribute Candidate candidate) {
-        candidateService.save(candidate);
-        return "redirect:/candidates";
+    public String create(@ModelAttribute Candidate candidate,  @RequestParam MultipartFile file, Model model) {
+        try {
+            candidateService.save(candidate, new FileDto(file.getOriginalFilename(), file.getBytes()));
+            return "redirect:/vacancies";
+        } catch (IOException e) {
+            model.addAttribute("message", e.getMessage());
+            return "errors/404";
+        }
     }
 
     @GetMapping("/{id}")
@@ -59,13 +69,19 @@ public class CandidateController {
     }
 
     @PostMapping("/update")
-    public String update(Model model, @ModelAttribute Candidate candidate) {
-        var isUpdated = candidateService.update(candidate);
-        if (!isUpdated) {
-            model.addAttribute("message", "Кандидат с указанным идентификатором не найдена");
+    public String update(Model model, @ModelAttribute Candidate candidate, @RequestParam MultipartFile file) {
+        try {
+            var isUpdated = candidateService.update(candidate,
+                    new FileDto(file.getOriginalFilename(), file.getBytes()));
+            if (!isUpdated) {
+                model.addAttribute("message", "Кандидат с указанным идентификатором не найдена");
+                return "errors/404";
+            }
+            return "redirect:/candidates";
+        } catch (Exception exception) {
+            model.addAttribute("message", exception.getMessage());
             return "errors/404";
         }
-        return "redirect:/candidates";
     }
 
     @GetMapping("/delete/{id}")

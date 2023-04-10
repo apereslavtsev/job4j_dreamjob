@@ -21,12 +21,12 @@ public class MemoryCandidateRepository implements CandidateRepository {
     private final Map<Integer, Candidate> candidates = new ConcurrentHashMap<>();
     
     public MemoryCandidateRepository() {
-        save(new Candidate(0, "Igor", "Intern Java Developer description", LocalDateTime.now(), 1));
-        save(new Candidate(0, "Vladislav", "Junior Java Developer description", LocalDateTime.now(), 2));
-        save(new Candidate(0, "Oleg", "Junior+ Java Developer description", LocalDateTime.now(), 3));
-        save(new Candidate(0, "Mark", "Middle Java Developer description", LocalDateTime.now(), 4));
-        save(new Candidate(0, "Stanislav", "Middle+ Java Developer description", LocalDateTime.now(), 5));
-        save(new Candidate(0, "Dmitry", "Senior Java Developer description", LocalDateTime.now(), 6));
+        save(new Candidate(0, "Igor", "Intern Java Developer description", LocalDateTime.now(), 1, 0));
+        save(new Candidate(0, "Vladislav", "Junior Java Developer description", LocalDateTime.now(), 2, 0));
+        save(new Candidate(0, "Oleg", "Junior+ Java Developer description", LocalDateTime.now(), 3, 0));
+        save(new Candidate(0, "Mark", "Middle Java Developer description", LocalDateTime.now(), 4, 0));
+        save(new Candidate(0, "Stanislav", "Middle+ Java Developer description", LocalDateTime.now(), 5, 0));
+        save(new Candidate(0, "Dmitry", "Senior Java Developer description", LocalDateTime.now(), 6, 0));
     }
     
     @Override
@@ -46,7 +46,7 @@ public class MemoryCandidateRepository implements CandidateRepository {
         return candidates.computeIfPresent(
                 candidate.getId(), (id, oldCandidate) -> new Candidate(oldCandidate.getId(),
                         candidate.getName(), candidate.getDescription(), 
-                        oldCandidate.getCreationDate(), candidate.getCityId())) != null;
+                        oldCandidate.getCreationDate(), candidate.getCityId(), candidate.getFileId())) != null;
     }
 
     @Override
