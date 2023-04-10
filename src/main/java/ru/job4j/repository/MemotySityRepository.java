@@ -8,7 +8,6 @@ import org.springframework.stereotype.Repository;
 
 import ru.job4j.model.City;
 
-@Repository
 public class MemotySityRepository implements CityRepository {
     
     private final Map<Integer, City> cities = new HashMap<>();
