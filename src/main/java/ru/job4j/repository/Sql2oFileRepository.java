@@ -7,7 +7,7 @@ import ru.job4j.model.File;
 
 import java.util.Optional;
 
-
+@Repository
 public class Sql2oFileRepository implements FileRepository {
 
     private final Sql2o sql2o;

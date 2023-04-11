@@ -13,7 +13,6 @@ import org.springframework.stereotype.Repository;
 import ru.job4j.model.Vacancy;
 
 @ThreadSafe
-@Repository
 public class MemoryVacancyRepository implements VacancyRepository {
     
     private AtomicInteger atomicInt = new AtomicInteger(1);
