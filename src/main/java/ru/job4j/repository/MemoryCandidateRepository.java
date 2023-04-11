@@ -13,7 +13,6 @@ import org.springframework.stereotype.Repository;
 import ru.job4j.model.Candidate;
 
 @ThreadSafe
-@Repository
 public class MemoryCandidateRepository implements CandidateRepository {
 
     private AtomicInteger atomicInt = new AtomicInteger(1);
