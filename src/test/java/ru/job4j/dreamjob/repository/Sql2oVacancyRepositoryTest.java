@@ -8,6 +8,7 @@ import ru.job4j.dreamjob.configuration.DatasourceConfiguration;
 import ru.job4j.dreamjob.model.File;
 import ru.job4j.dreamjob.model.Vacancy;
 
+import java.io.InputStream;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Properties;
@@ -32,9 +33,9 @@ public class Sql2oVacancyRepositoryTest {
                 .getResourceAsStream("connection.properties")) {
             properties.load(inputStream);
         }
-        var url = properties.getProperty("datasource.url");
-        var username = properties.getProperty("datasource.username");
-        var password = properties.getProperty("datasource.password");
+        String url = properties.getProperty("url");
+        String username = properties.getProperty("username");
+        String password = properties.getProperty("password");
 
         var configuration = new DatasourceConfiguration();
         var datasource = configuration.connectionPool(url, username, password);
