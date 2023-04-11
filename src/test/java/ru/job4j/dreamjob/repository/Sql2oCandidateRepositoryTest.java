@@ -5,8 +5,8 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import ru.job4j.dreamjob.configuration.DatasourceConfiguration;
+import ru.job4j.dreamjob.model.Candidate;
 import ru.job4j.dreamjob.model.File;
-import ru.job4j.dreamjob.model.Vacancy;
 
 import java.time.temporal.ChronoUnit;
 import java.util.List;
@@ -17,9 +17,9 @@ import static java.util.Collections.emptyList;
 import static java.util.Optional.empty;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-public class Sql2oVacancyRepositoryTest {
+public class Sql2oCandidateRepositoryTest {
 
-    private static Sql2oVacancyRepository sql2oVacancyRepository;
+    private static Sql2oCandidateRepository sql2oCandidateRepository;
 
     private static Sql2oFileRepository sql2oFileRepository;
 
@@ -28,7 +28,7 @@ public class Sql2oVacancyRepositoryTest {
     @BeforeAll
     public static void initRepositories() throws Exception {
         var properties = new Properties();
-        try (var inputStream = Sql2oVacancyRepositoryTest.class.getClassLoader()
+        try (var inputStream = Sql2oCandidateRepositoryTest.class.getClassLoader()
                 .getResourceAsStream("connection.properties")) {
             properties.load(inputStream);
         }
@@ -40,7 +40,7 @@ public class Sql2oVacancyRepositoryTest {
         var datasource = configuration.connectionPool(url, username, password);
         var sql2o = configuration.databaseClient(datasource);
 
-        sql2oVacancyRepository = new Sql2oVacancyRepository(sql2o);
+        sql2oCandidateRepository = new Sql2oCandidateRepository(sql2o);
         sql2oFileRepository = new Sql2oFileRepository(sql2o);
 
         /* нужно сохранить хотя бы один файл, т.к. Vacancy от него зависит*/
@@ -55,70 +55,74 @@ public class Sql2oVacancyRepositoryTest {
 
     @AfterEach
     public void clearVacancies() {
-        var vacancies = sql2oVacancyRepository.findAll();
-        for (var vacancy : vacancies) {
-            sql2oVacancyRepository.deleteById(vacancy.getId());
+        var candidates = sql2oCandidateRepository.findAll();
+        for (var candidate : candidates) {
+            sql2oCandidateRepository.deleteById(candidate.getId());
         }
     }
 
     @Test
     public void whenSaveThenGetSame() {
         var creationDate = now().truncatedTo(ChronoUnit.MINUTES);
-        var vacancy = sql2oVacancyRepository.save(new Vacancy(0, "title", "description", creationDate, true, 1, file.getId()));
-        var savedVacancy = sql2oVacancyRepository.findById(vacancy.getId()).get();
-        assertThat(savedVacancy).usingRecursiveComparison().isEqualTo(vacancy);
+        var candidate = sql2oCandidateRepository.save(
+                new Candidate(0, "name", "description", creationDate, 1, file.getId())
+        );
+        var savedCandidate = sql2oCandidateRepository.findById(candidate.getId()).get();
+        assertThat(savedCandidate).usingRecursiveComparison().isEqualTo(candidate);
     }
 
     @Test
     public void whenSaveSeveralThenGetAll() {
         var creationDate = now().truncatedTo(ChronoUnit.MINUTES);
-        var vacancy1 = sql2oVacancyRepository.save(new Vacancy(0, "title1", "description1", creationDate, true, 1, file.getId()));
-        var vacancy2 = sql2oVacancyRepository.save(new Vacancy(0, "title2", "description2", creationDate, false, 1, file.getId()));
-        var vacancy3 = sql2oVacancyRepository.save(new Vacancy(0, "title3", "description3", creationDate, true, 1, file.getId()));
-        var result = sql2oVacancyRepository.findAll();
-        assertThat(result).isEqualTo(List.of(vacancy1, vacancy2, vacancy3));
+        var candidate = sql2oCandidateRepository.save(new Candidate(0, "name1", "description1", creationDate, 1, file.getId()));
+        var candidate2 = sql2oCandidateRepository.save(new Candidate(0, "name2", "description2", creationDate, 1, file.getId()));
+        var candidate3 = sql2oCandidateRepository.save(new Candidate(0, "name3", "description3", creationDate, 1, file.getId()));
+        var result = sql2oCandidateRepository.findAll();
+        assertThat(result).isEqualTo(List.of(candidate, candidate2, candidate3));
     }
 
     @Test
     public void whenDontSaveThenNothingFound() {
-        assertThat(sql2oVacancyRepository.findAll()).isEqualTo(emptyList());
-        assertThat(sql2oVacancyRepository.findById(0)).isEqualTo(empty());
+        assertThat(sql2oCandidateRepository.findAll()).isEqualTo(emptyList());
+        assertThat(sql2oCandidateRepository.findById(0)).isEqualTo(empty());
     }
 
     @Test
     public void whenDeleteThenGetEmptyOptional() {
         var creationDate = now().truncatedTo(ChronoUnit.MINUTES);
-        var vacancy = sql2oVacancyRepository.save(new Vacancy(0, "title", "description", creationDate, true, 1, file.getId()));
-        var isDeleted = sql2oVacancyRepository.deleteById(vacancy.getId());
-        var savedVacancy = sql2oVacancyRepository.findById(vacancy.getId());
+        var candidate = sql2oCandidateRepository.save(
+                new Candidate(0, "name", "description", creationDate, 1, file.getId())
+        );
+        var isDeleted = sql2oCandidateRepository.deleteById(candidate.getId());
+        var savedVacancy = sql2oCandidateRepository.findById(candidate.getId());
         assertThat(isDeleted).isTrue();
         assertThat(savedVacancy).isEqualTo(empty());
     }
 
     @Test
     public void whenDeleteByInvalidIdThenGetFalse() {
-        assertThat(sql2oVacancyRepository.deleteById(0)).isFalse();
+        assertThat(sql2oCandidateRepository.deleteById(0)).isFalse();
     }
 
     @Test
     public void whenUpdateThenGetUpdated() {
         var creationDate = now().truncatedTo(ChronoUnit.MINUTES);
-        var vacancy = sql2oVacancyRepository.save(new Vacancy(0, "title", "description", creationDate, true, 1, file.getId()));
-        var updatedVacancy = new Vacancy(
-                vacancy.getId(), "new title", "new description", creationDate.plusDays(1),
-                !vacancy.getVisible(), 1, file.getId()
+        var candidate = sql2oCandidateRepository.save(new Candidate(0, "name", "description", creationDate,  1, file.getId()));
+        var updatedCandidate = new Candidate(
+                candidate.getId(), "new name", "new description",
+                creationDate.plusDays(1), 1, file.getId()
         );
-        var isUpdated = sql2oVacancyRepository.update(updatedVacancy);
-        var savedVacancy = sql2oVacancyRepository.findById(updatedVacancy.getId()).get();
+        var isUpdated = sql2oCandidateRepository.update(updatedCandidate);
+        var savedCandidate = sql2oCandidateRepository.findById(updatedCandidate.getId()).get();
         assertThat(isUpdated).isTrue();
-        assertThat(savedVacancy).usingRecursiveComparison().isEqualTo(updatedVacancy);
+        assertThat(savedCandidate).usingRecursiveComparison().isEqualTo(updatedCandidate);
     }
 
     @Test
     public void whenUpdateUnExistingVacancyThenGetFalse() {
         var creationDate = now().truncatedTo(ChronoUnit.MINUTES);
-        var vacancy = new Vacancy(0, "title", "description", creationDate, true, 1, file.getId());
-        var isUpdated = sql2oVacancyRepository.update(vacancy);
+        var candidate = new Candidate(0, "name", "description", creationDate, 1, file.getId());
+        var isUpdated = sql2oCandidateRepository.update(candidate);
         assertThat(isUpdated).isFalse();
     }
 
