@@ -18,7 +18,7 @@ public class Sql2oUserRepository implements UserRepository {
     }
     
     @Override
-    public User save(User user) {
+    public Optional<User> save(User user) {
         try (var connection = sql2o.open()) {
             var query = connection.createQuery("INSERT INTO users (email, name, password) "
                     + "VALUES (:email, :name, :password)", true)
@@ -27,7 +27,7 @@ public class Sql2oUserRepository implements UserRepository {
                     .addParameter("password", user.getPassword());
             int generatedId = query.executeUpdate().getKey(Integer.class);
             user.setId(generatedId);
-            return user;
+            return Optional.of(user);
         }
     }
 

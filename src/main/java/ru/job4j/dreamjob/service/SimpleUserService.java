@@ -17,8 +17,12 @@ public class SimpleUserService implements UserService {
     }
 
     @Override
-    public User save(User user) {
-        return userRepository.save(user);
+    public Optional<User> save(User user) {
+        try {
+            return userRepository.save(user);
+        } catch (Exception exception) {
+            return Optional.empty();
+        }
     }
 
     @Override
