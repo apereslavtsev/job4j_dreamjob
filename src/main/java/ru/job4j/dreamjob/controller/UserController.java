@@ -25,8 +25,6 @@ public class UserController {
     
     @GetMapping("/register")
     String getRegistationPage(Model model, HttpSession session) {
-        var user = (User) session.getAttribute("user");
-        model.addAttribute("user", User.getDefaultUserIfAbsent(user));
         return "users/register";
     }
     
@@ -42,8 +40,6 @@ public class UserController {
     
     @GetMapping("/login")
     public String getLoginPage(Model model, HttpSession session) {
-        var user = (User) session.getAttribute("user");
-        model.addAttribute("user", User.getDefaultUserIfAbsent(user));
         return "users/login";
     }
 

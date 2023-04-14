@@ -39,16 +39,12 @@ public class CandidateController {
     @GetMapping
     private String getAll(Model model, HttpSession session) {
         model.addAttribute("candidates", candidateService.findAll());
-        var user = (User) session.getAttribute("user");
-        model.addAttribute("user", User.getDefaultUserIfAbsent(user));
         return "candidates/list";
     }
     
     @GetMapping("/create")
     public String getCreationPage(Model model, HttpSession session) {
         model.addAttribute("cities", cityService.getAll());
-        var user = (User) session.getAttribute("user");
-        model.addAttribute("user", User.getDefaultUserIfAbsent(user));
         return "candidates/create";
     }
     
@@ -65,8 +61,6 @@ public class CandidateController {
 
     @GetMapping("/{id}")
     public String getById(Model model, @PathVariable int id, HttpSession session) {
-        var user = (User) session.getAttribute("user");
-        model.addAttribute("user", User.getDefaultUserIfAbsent(user));
         var candidateOptional = candidateService.findById(id);
         if (candidateOptional.isEmpty()) {
             model.addAttribute("message", "Кандидат с указанным идентификатором не найдена");
@@ -95,8 +89,6 @@ public class CandidateController {
 
     @GetMapping("/delete/{id}")
     public String delete(Model model, @PathVariable int id, HttpSession session) {
-        var user = (User) session.getAttribute("user");
-        model.addAttribute("user", User.getDefaultUserIfAbsent(user));
         var isDeleted = candidateService.deleteById(id);
         if (!isDeleted) {
             model.addAttribute("message", "Кандидат с указанным идентификатором не найдена");
