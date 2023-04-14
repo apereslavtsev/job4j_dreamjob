@@ -20,9 +20,9 @@ public class SimpleUserService implements UserService {
     public Optional<User> save(User user) {
         try {
             return userRepository.save(user);
-        } catch (Exception exception) {
-            return Optional.empty();
+        } catch (Exception exception) {            
         }
+        return Optional.empty();
     }
 
     @Override
