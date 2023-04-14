@@ -1,5 +1,8 @@
 package ru.job4j.dreamjob.controller;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,7 +24,9 @@ public class UserController {
     }
     
     @GetMapping("/register")
-    String getRegistationPage() {
+    String getRegistationPage(Model model, HttpSession session) {
+        var user = (User) session.getAttribute("user");
+        model.addAttribute("user", User.getDefaultUserIfAbsent(user));
         return "users/register";
     }
     
@@ -32,22 +37,32 @@ public class UserController {
             model.addAttribute("message", "Пользователь с такой почтой уже существует");
             return "errors/404";
         }
-        return "redirect:/vacancies";        
+        return "redirect:/";        
     }
     
     @GetMapping("/login")
-    public String getLoginPage() {
+    public String getLoginPage(Model model, HttpSession session) {
+        var user = (User) session.getAttribute("user");
+        model.addAttribute("user", User.getDefaultUserIfAbsent(user));
         return "users/login";
     }
 
     @PostMapping("/login")
-    public String loginUser(@ModelAttribute User user, Model model) {
+    public String loginUser(@ModelAttribute User user, Model model, HttpServletRequest request) {
         var userOptional = userService.findByEmailAndPassword(user.getEmail(), user.getPassword());
         if (userOptional.isEmpty()) {
             model.addAttribute("error", "Почта или пароль введены неверно");
             return "users/login";
         }
-        return "redirect:/vacancies";
+        var session = request.getSession();
+        session.setAttribute("user", userOptional.get());
+        return "redirect:/";
+    }
+    
+    @GetMapping("/logout")
+    public String logout(HttpSession session) {
+        session.invalidate();
+        return "redirect:/users/login";
     }
     
 }

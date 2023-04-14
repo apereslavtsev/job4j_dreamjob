@@ -12,6 +12,19 @@ public class User {
         
     private String password;
     
+    private static User getDefaultUser() {
+        User user = new User();
+        user.setName("Гость");
+        return user;
+    }
+    
+    public static User getDefaultUserIfAbsent(User user) {
+        if (user == null) {
+            user = getDefaultUser();
+        }
+        return user;
+    }
+    
     public User() {
         
     }
