@@ -49,9 +49,12 @@ public class CandidateController {
     }
     
     @PostMapping("/create")
-    public String create(@ModelAttribute Candidate candidate, @RequestParam MultipartFile file, Model model) {
+    public String create(@ModelAttribute Candidate candidate, 
+            @RequestParam MultipartFile file, Model model) {
+        
         try {
-            candidateService.save(candidate, new FileDto(file.getOriginalFilename(), file.getBytes()));
+            candidateService.save(candidate, 
+                    new FileDto(file.getOriginalFilename(), file.getBytes()));
             return "redirect:/candidates";
         } catch (IOException e) {
             model.addAttribute("message", e.getMessage());
@@ -60,7 +63,9 @@ public class CandidateController {
     }
 
     @GetMapping("/{id}")
-    public String getById(Model model, @PathVariable int id, HttpSession session) {
+    public String getById(Model model, 
+            @PathVariable int id, HttpSession session) {
+        
         var candidateOptional = candidateService.findById(id);
         if (candidateOptional.isEmpty()) {
             model.addAttribute("message", "Кандидат с указанным идентификатором не найдена");
@@ -72,7 +77,9 @@ public class CandidateController {
     }
 
     @PostMapping("/update")
-    public String update(Model model, @ModelAttribute Candidate candidate, @RequestParam MultipartFile file) {
+    public String update(Model model, @ModelAttribute Candidate candidate, 
+            @RequestParam MultipartFile file) {
+        
         try {
             var isUpdated = candidateService.update(candidate,
                     new FileDto(file.getOriginalFilename(), file.getBytes()));

@@ -19,8 +19,12 @@ public class Sql2oVacancyRepository implements VacancyRepository {
     public Vacancy save(Vacancy vacancy) {
         try (var connection = sql2o.open()) {
             var sql = """
-                      INSERT INTO vacancies(title, description, creation_date, visible, city_id, file_id)
-                      VALUES (:title, :description, :creationDate, :visible, :cityId, :fileId)
+                      INSERT INTO vacancies(
+                          title, description, creation_date, visible, city_id, file_id
+                      )
+                      VALUES (
+                          :title, :description, :creationDate, :visible, :cityId, :fileId
+                      )
                       """;
             var query = connection.createQuery(sql, true)
                     .addParameter("title", vacancy.getTitle())
@@ -50,7 +54,8 @@ public class Sql2oVacancyRepository implements VacancyRepository {
         try (var connection = sql2o.open()) {
             var sql = """
                     UPDATE vacancies
-                    SET title = :title, description = :description, creation_date = :creationDate,
+                    SET title = :title, description = :description, 
+                        creation_date = :creationDate,
                         visible = :visible, city_id = :cityId, file_id = :fileId
                     WHERE id = :id
                     """;
@@ -72,7 +77,8 @@ public class Sql2oVacancyRepository implements VacancyRepository {
         try (var connection = sql2o.open()) {
             var query = connection.createQuery("SELECT * FROM vacancies WHERE id = :id");
             query.addParameter("id", id);
-            var vacancy = query.setColumnMappings(Vacancy.COLUMN_MAPPING).executeAndFetchFirst(Vacancy.class);
+            var vacancy = query.setColumnMappings(Vacancy.COLUMN_MAPPING)
+                    .executeAndFetchFirst(Vacancy.class);
             return Optional.ofNullable(vacancy);
         }
     }
@@ -81,7 +87,8 @@ public class Sql2oVacancyRepository implements VacancyRepository {
     public Collection<Vacancy> findAll() {
         try (var connection = sql2o.open()) {
             var query = connection.createQuery("SELECT * FROM vacancies");
-            return query.setColumnMappings(Vacancy.COLUMN_MAPPING).executeAndFetch(Vacancy.class);
+            return query.setColumnMappings(Vacancy.COLUMN_MAPPING)
+                    .executeAndFetch(Vacancy.class);
         }
     }
 
