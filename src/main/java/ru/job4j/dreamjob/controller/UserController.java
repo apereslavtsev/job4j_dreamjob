@@ -1,6 +1,5 @@
 package ru.job4j.dreamjob.controller;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Controller;
@@ -24,7 +23,7 @@ public class UserController {
     }
     
     @GetMapping("/register")
-    String getRegistationPage(Model model, HttpSession session) {
+    String getRegistationPage() {
         return "users/register";
     }
     
@@ -39,13 +38,13 @@ public class UserController {
     }
     
     @GetMapping("/login")
-    public String getLoginPage(Model model, HttpSession session) {
+    public String getLoginPage() {
         return "users/login";
     }
 
     @PostMapping("/login")
-    public String loginUser(@ModelAttribute User user, Model model, 
-            HttpServletRequest request) {
+    public String loginUser(@ModelAttribute User user,
+            Model model, HttpSession session) {
         
         var userOptional = userService.findByEmailAndPassword(
                 user.getEmail(), user.getPassword());
@@ -54,7 +53,6 @@ public class UserController {
             model.addAttribute("error", "Почта или пароль введены неверно");
             return "users/login";
         }
-        var session = request.getSession();
         session.setAttribute("user", userOptional.get());
         return "redirect:/";
     }

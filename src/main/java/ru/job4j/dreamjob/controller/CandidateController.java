@@ -1,11 +1,8 @@
 package ru.job4j.dreamjob.controller;
 
-
-import java.io.IOException;
-
-import javax.servlet.http.HttpSession;
-
 import org.junit.runner.notification.RunListener.ThreadSafe;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,9 +14,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import ru.job4j.dreamjob.model.Candidate;
-import ru.job4j.dreamjob.model.User;
 import ru.job4j.dreamjob.service.CandidateService;
 import ru.job4j.dreamjob.service.CityService;
+import ru.job4j.dreamjob.service.SimpleUserService;
 import ru.job4j.dreamjob.dto.FileDto;
 
 @ThreadSafe
@@ -31,19 +28,21 @@ public class CandidateController {
     
     private final CityService cityService;
     
+    private static final Logger LOG = LoggerFactory.getLogger(SimpleUserService.class.getName());
+    
     public CandidateController(CandidateService candidateService, CityService cityService) {
         this.candidateService = candidateService;        
         this.cityService = cityService;
     }
     
     @GetMapping
-    private String getAll(Model model, HttpSession session) {
+    public String getAll(Model model) {
         model.addAttribute("candidates", candidateService.findAll());
         return "candidates/list";
     }
     
     @GetMapping("/create")
-    public String getCreationPage(Model model, HttpSession session) {
+    public String getCreationPage(Model model) {
         model.addAttribute("cities", cityService.getAll());
         return "candidates/create";
     }
@@ -56,19 +55,19 @@ public class CandidateController {
             candidateService.save(candidate, 
                     new FileDto(file.getOriginalFilename(), file.getBytes()));
             return "redirect:/candidates";
-        } catch (IOException e) {
+        } catch (Exception e) {
             model.addAttribute("message", e.getMessage());
+            LOG.error("Exception in save candidate", e);
             return "errors/404";
         }
     }
 
     @GetMapping("/{id}")
-    public String getById(Model model, 
-            @PathVariable int id, HttpSession session) {
+    public String getById(Model model, @PathVariable int id) {
         
         var candidateOptional = candidateService.findById(id);
         if (candidateOptional.isEmpty()) {
-            model.addAttribute("message", "Кандидат с указанным идентификатором не найдена");
+            model.addAttribute("message", "Кандидат с указанным идентификатором не найден");
             return "errors/404";
         }
         model.addAttribute("cities", cityService.getAll());
@@ -77,28 +76,29 @@ public class CandidateController {
     }
 
     @PostMapping("/update")
-    public String update(Model model, @ModelAttribute Candidate candidate, 
-            @RequestParam MultipartFile file) {
+    public String update(@ModelAttribute Candidate candidate, 
+            @RequestParam MultipartFile file, Model model) {
         
         try {
             var isUpdated = candidateService.update(candidate,
                     new FileDto(file.getOriginalFilename(), file.getBytes()));
             if (!isUpdated) {
-                model.addAttribute("message", "Кандидат с указанным идентификатором не найдена");
+                model.addAttribute("message", "Кандидат с указанным идентификатором не найден");
                 return "errors/404";
             }
             return "redirect:/candidates";
-        } catch (Exception exception) {
-            model.addAttribute("message", exception.getMessage());
+        } catch (Exception e) {
+            model.addAttribute("message", e.getMessage());
+            LOG.error("Exception in update candidate", e);
             return "errors/404";
         }
     }
 
     @GetMapping("/delete/{id}")
-    public String delete(Model model, @PathVariable int id, HttpSession session) {
+    public String delete(Model model, @PathVariable int id) {
         var isDeleted = candidateService.deleteById(id);
         if (!isDeleted) {
-            model.addAttribute("message", "Кандидат с указанным идентификатором не найдена");
+            model.addAttribute("message", "Кандидат с указанным идентификатором не найден");
             return "errors/404";
         }
         return "redirect:/candidates";
